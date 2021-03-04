@@ -16,7 +16,8 @@ public class Menu {
 	// These are options that the user can select from the menu
 	// Add new options here
 	private List<String> options = Arrays.asList(
-			"Display All Posts and Comments by User ID"
+			"Display All Posts and Comments by User ID",
+			"another options"
 	);
 	
 	// Create a data access object to allow getting data from the db via a layer
