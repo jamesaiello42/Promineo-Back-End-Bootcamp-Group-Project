@@ -4,19 +4,15 @@ public class Comments {
 	private int id;
 	private int postId;
 	private int commenterId;
+	private String commenterUsername;
 	private String commentText;
 	private String dateCommented;
 	private String dateEdited;
 	
-	public Comments(int id, int postId, int commenterId, String commentText, String dateCommented, String dateEdited) {
-		this.id = id;
-		this.postId = postId;
-		this.commenterId = commenterId;
-		this.commentText = commentText;
-		this.dateCommented = dateCommented;
-		this.dateEdited = dateEdited;
-	}
-
+	// Post data
+	private String postText;
+	private String posterUsername;
+	
 	public int getId() {
 		return id;
 	}
@@ -39,5 +35,17 @@ public class Comments {
 	
 	public String getDateEdited() {
 		return dateEdited;
+	}
+
+	public String getCommenterUsername() {
+		return commenterUsername;
+	}
+
+	public String getPostText() {
+		return postText;
+	}
+
+	public String getPosterUsername() {
+		return posterUsername;
 	}
 }
