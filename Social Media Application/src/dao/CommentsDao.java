@@ -27,6 +27,8 @@ public class CommentsDao {
 	
 	// Create a new comment or update a comment
 	private final String CREATE_COMMENTS_QUERY = "INSERT INTO COMMENTS (POST_ID, COMMENTER_ID, COMMENT_TEXT, DATE_COMMENTED, DATE_EDITED) VALUES (?, ?, ?, NOW(), NOW())";
+	private final String CREATE_COMMENTS_QUERY_CHECK_POST = "SELECT COUNT(*) AS CNT FROM POSTS WHERE ID = ?";
+	private final String CREATE_COMMENTS_QUERY_CHECK_USER = "SELECT COUNT(*) AS CNT FROM USERS WHERE ID = ?";
 	private final String UPDATE_COMMENTS_QUERY_BY_ID = "UPDATE COMMENTS SET COMMENT_TEXT = ?, DATE_EDITED = NOW() WHERE ID = ?";
 	
 	// Delete dependencies and delete from comments
@@ -58,11 +60,42 @@ public class CommentsDao {
 	
 	// Methods creates a new comment in the database
 	public void createNewComment(int postId, int commenterId, String commentText) throws SQLException {	
-		PreparedStatement ps = connection.prepareStatement(CREATE_COMMENTS_QUERY);
+		
+		// Check variable to prevent program erroring out when parent does not exist
+		int checkPost = 0, checkUser = 0;
+		
+		// Statement to prevent program erroring out when parent post does not exist
+		PreparedStatement ps = connection.prepareStatement(CREATE_COMMENTS_QUERY_CHECK_POST);
 		ps.setInt(1, postId);
-		ps.setInt(2, commenterId);
-		ps.setString(3, commentText);
-		ps.executeUpdate();
+		ResultSet rs = ps.executeQuery();
+		
+		// Statement to prevent program erroring out when parent usser does not exist
+		PreparedStatement ps2 = connection.prepareStatement(CREATE_COMMENTS_QUERY_CHECK_USER);
+		ps2.setInt(1, commenterId);
+		ResultSet rs2 = ps2.executeQuery();
+		
+		
+		// Loop through all post rows to check
+		while (rs.next()) {
+			checkPost = rs.getInt(1);
+		}
+		
+		// Loop through all user rows to check
+		while (rs2.next()) {
+			checkUser = rs2.getInt(1);
+		}
+		
+		// Only execute this code if Users and Posts have a parent row
+		if (checkPost > 0 && checkUser > 0) {
+			PreparedStatement ps3 = connection.prepareStatement(CREATE_COMMENTS_QUERY);
+			ps3.setInt(1, postId);
+			ps3.setInt(2, commenterId);
+			ps3.setString(3, commentText);
+			ps3.executeUpdate();
+		}
+		else 
+			// Tell user something is up
+			System.out.println("\nCannot insert into Comments because parent record does not exist in Users or Posts");
 	}
 	
 	// Methods updates a comment in the database by id
@@ -80,6 +113,6 @@ public class CommentsDao {
 		
 		// Set parameter and execute query
 		ps.setInt(1, id);
-		
+		ps.executeUpdate();
 	}
 }
