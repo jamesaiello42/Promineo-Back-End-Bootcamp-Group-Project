@@ -5,7 +5,8 @@ create database if not exists social_media_db;
 
 use social_media_db;
 
-drop table if exists likes;
+drop table if exists comment_likes;
+drop table if exists post_likes;
 drop table if exists comments;
 drop table if exists posts;
 drop table if exists users;
@@ -25,7 +26,7 @@ create table posts (
 	date_posted datetime not null,
 	date_edited datetime not null,
 	primary key (id),
-	foreign key (poster_id) references users(id)
+	foreign key (poster_id) references users(id) ON DELETE CASCADE
 );
 
 create table comments (
@@ -36,20 +37,28 @@ create table comments (
 	date_commented datetime not null,
 	date_edited datetime not null,
 	primary key (id),
-	foreign key (post_id) references posts(id),
-	foreign key (commenter_id) references users(id)
+	foreign key (post_id) references posts(id) ON DELETE CASCADE,
+	foreign key (commenter_id) references users(id) ON DELETE CASCADE
 );
 
-create table likes (
+create table post_likes (
 	id int(11) not null auto_increment,
 	user_id int(11) not null,
-	post_or_comment_id int(11) not null,
-	post_or_comment char(50) not null,
+	post_id int(11) not null,
 	date_liked datetime not null,
 	primary key (id),
-	foreign key (user_id) references users(id),
-	foreign key (post_or_comment_id) references posts(id),
-	foreign key (post_or_comment_id) references comments(id)
+	foreign key (user_id) references users(id) ON DELETE CASCADE,
+	foreign key (post_id) references posts(id) ON DELETE CASCADE
+);
+
+create table comment_likes (
+	id int(11) not null auto_increment,
+	user_id int(11) not null,
+	comment_id int(11) not null,
+	date_liked datetime not null,
+	primary key (id),
+	foreign key (user_id) references users(id) ON DELETE CASCADE,
+	foreign key (comment_id) references comments(id) ON DELETE CASCADE
 );
 
 -- Insert sample data into users
@@ -88,14 +97,16 @@ insert into comments (post_id, commenter_id, comment_text, date_commented, date_
 insert into comments (post_id, commenter_id, comment_text, date_commented, date_edited) values (9, 4, 'hDYJAGSVGSGYLJBTF bQNS fGX mP.', '2019-02-21 21:33:00', '2020-10-08 22:33:00');
 insert into comments (post_id, commenter_id, comment_text, date_commented, date_edited) values (10, 7, 'dDJZNVDGSXTXUSVTQ uFHX nVA yE.', '2018-12-25 21:33:00', '2020-03-15 22:33:00');
 
--- Insert sample data into likes
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (10, 1, 'post', '2020-05-21 07:12:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (1, 1, 'post', '2020-12-17 19:34:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (4, 2, 'comment', '2020-06-28 20:49:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (9, 3, 'comment', '2021-01-12 20:59:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (1, 4, 'comment', '2020-04-30 10:52:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (4, 5, 'post', '2020-11-10 06:58:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (1, 6, 'post', '2020-11-06 02:54:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (3, 7, 'post', '2020-12-12 14:29:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (7, 10, 'post', '2020-04-25 05:47:00');
-insert into likes (user_id, post_or_comment_id, post_or_comment, date_liked) values (9, 8, 'comment', '2020-04-22 02:44:00');
+-- Insert sample data into post likes
+insert into post_likes (user_id, post_id, date_liked) values (10, 1, '2020-05-21 07:12:00');
+insert into post_likes (user_id, post_id, date_liked) values (1, 1, '2020-12-17 19:34:00');
+insert into post_likes (user_id, post_id, date_liked) values (4, 5, '2020-11-10 06:58:00');
+insert into post_likes (user_id, post_id, date_liked) values (1, 6, '2020-11-06 02:54:00');
+insert into post_likes (user_id, post_id, date_liked) values (3, 7, '2020-12-12 14:29:00');
+insert into post_likes (user_id, post_id, date_liked) values (7, 10, '2020-04-25 05:47:00');
+
+-- Insert sample data into comment likes
+insert into comment_likes (user_id, comment_id, date_liked) values (4, 2, '2020-06-28 20:49:00');
+insert into comment_likes (user_id, comment_id, date_liked) values (9, 3, '2021-01-12 20:59:00');
+insert into comment_likes (user_id, comment_id, date_liked) values (1, 4, '2020-04-30 10:52:00');
+insert into comment_likes (user_id, comment_id, date_liked) values (9, 8, '2020-04-22 02:44:00');

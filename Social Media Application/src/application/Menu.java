@@ -13,12 +13,14 @@ public class Menu {
 	private CommentsDao commentsDao;
 	private LikesDao likesDao;
 	private Scanner scanner = new Scanner(System.in);
-	private Scanner scanner2 = new Scanner(System.in);
 	
 	// These are options that the user can select from the menu
 	// Add new options here
 	private List<String> options = Arrays.asList(
-			"Display All Posts and Comments by User ID"
+			"Display All Posts and Comments by User ID",
+			"Create a new comment",
+			"Update Comment Text by ID",
+			"Delete Comment by ID"
 	);
 	
 	// Create a data access object to allow getting data from the db via a layer
@@ -37,20 +39,49 @@ public class Menu {
 			printMenu();
 			selection = scanner.nextLine();
 			
-			// These are variables are initialized the by scanner objects and passed to the dao object
+			// These are variables are initialized the by scanner objects and passed to dao objects
 			int userId;
+			int postId;
+			int commentId;
+			String commentText;
 			
 			// Determine which operation
-			switch (selection) {
-				// Display all comments and post by the passed in user from the db
-				case "1":		
-					System.out.println("\nEnter in the ID of the User: ");
-					userId = scanner2.nextInt();
-					System.out.println();
-					displayCommentsPostsByUser(userId);
-					System.out.println("\n");
-					break;								
+			try {
+					switch (selection) {
+						// Display all comments and post by the passed in user from the db
+						case "1":		
+							System.out.println("\nEnter in the ID of the User: ");
+							userId = Integer.parseInt(scanner.nextLine());
+							System.out.println();
+							displayCommentsPostsByUser(userId);
+							System.out.println("\n");
+							break;
+						// Menu option creates a new comment on a post
+						case "2":
+							System.out.println("\nEnter the Post ID, Commenter ID, and Comment Text: ");
+							postId = Integer.parseInt(scanner.nextLine());
+							userId = Integer.parseInt(scanner.nextLine());
+							commentText = scanner.nextLine();
+							createNewComment(postId, userId, commentText);
+							break;
+						// Menu option updates a comment's text based off what ID and string the user passes in
+						case "3":
+							System.out.println("\nEnter the Comment ID, and Comment Text: ");
+							commentId = Integer.parseInt(scanner.nextLine());
+							commentText = scanner.nextLine();
+							updateCommentByID(commentId, commentText);
+							break;
+						// Menu option deletes a comment by
+						case "4":
+							System.out.println("\nEnter the Comment ID to delete a comment (will also delete from Likes table due to dependency): ");
+							commentId = Integer.parseInt(scanner.nextLine());
+							deleteCommentByID(commentId);
+							break;
+				}
 			}
+				catch (SQLException e) {
+					e.printStackTrace();
+				}		
 			
 			// Line for neatness
 			System.out.println();
@@ -70,7 +101,21 @@ public class Menu {
 		// If there are zero rows, tell the user nothing is found
 		if (comments.size() == 0)
 			System.out.println("Results of Posts and Comments by User ID query \"" + userId + "\" not found.");
-	}	
+	}
+	
+	private void createNewComment(int postId, int commenterId, String commentText) throws SQLException
+	{
+		commentsDao.createNewComment(postId, commenterId, commentText);
+	}
+	
+	// Updates a single comment text by id 
+	private void updateCommentByID(int commentId, String commentText) throws SQLException {
+		commentsDao.updateComment(commentId, commentText);	
+	}
+	
+	private void deleteCommentByID(int commentId) throws SQLException {
+		commentsDao.deleteCommentById(commentId);
+	}
 	
 	// Loops through list of options that output to the user's screen
 	private void printMenu() {
