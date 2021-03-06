@@ -7,6 +7,7 @@ import java.util.Scanner;
 import dao.CommentsDao;
 import dao.LikesDao;
 import entity.Comments;
+import entity.Likes;
 
 public class Menu {
 	// Objects are responsible for directly touching the db. 
@@ -20,7 +21,9 @@ public class Menu {
 			"Display All Posts and Comments by User ID",
 			"Create a new comment",
 			"Update Comment Text by ID",
-			"Delete Comment by ID"
+			"Delete Comment by ID",
+			"Show number of Post and Comment Likes by User ID",
+			"Like a Post or like a Comment"
 	);
 	
 	// Create a data access object to allow getting data from the db via a layer
@@ -44,6 +47,7 @@ public class Menu {
 			int postId;
 			int commentId;
 			String commentText;
+			String commOrPost;
 			
 			// Determine which operation
 			try {
@@ -77,11 +81,39 @@ public class Menu {
 							commentId = Integer.parseInt(scanner.nextLine());
 							deleteCommentByID(commentId);
 							break;
+						// Show number of likes for one user's posts or comments
+						case "5":
+							System.out.println("\nEnter the ID of the User: ");
+							userId = Integer.parseInt(scanner.nextLine());
+							System.out.println();
+							displayNumberOfPostsCommentLikesByUser(userId);
+							break;
+						case "6":
+							System.out.println("\nLike a post or comment?: ");
+							commOrPost = scanner.nextLine();
+							
+							switch (commOrPost.toLowerCase())
+							{
+								case "post": 
+									System.out.println("\nGive the ID of the Post and ID of the User: ");
+									postId = Integer.parseInt(scanner.nextLine());
+									userId = Integer.parseInt(scanner.nextLine());
+									break;
+								case "comment":
+									System.out.println("\nGive the ID of the Comment and ID of the User: ");
+									commentId = Integer.parseInt(scanner.nextLine());
+									userId = Integer.parseInt(scanner.nextLine());
+									break;
+							}
+							
+							break;
+
 				}
 			}
-				catch (SQLException e) {
-					e.printStackTrace();
-				}		
+			// Show user any SQL errors
+			catch (SQLException e) {
+				e.printStackTrace();
+			}		
 			
 			// Line for neatness
 			System.out.println();
@@ -115,6 +147,18 @@ public class Menu {
 	
 	private void deleteCommentByID(int commentId) throws SQLException {
 		commentsDao.deleteCommentById(commentId);
+	}
+	
+	// Outputs a single row representing how many likes on a user's posts or comments
+	private void displayNumberOfPostsCommentLikesByUser(int userId) throws SQLException {
+		Likes likeNum = likesDao.getNumberOfPostsCommentLikesByUser(userId);
+		
+		// If there are zero rows, tell the user nothing is found
+		if (likeNum.getUserName() == null)
+			System.out.println("Results of Posts and Comments by User ID query \"" + userId + "\" not found.");
+		else
+			// Show comment, post info, and usernames attached to both.
+			System.out.println("Username: " + likeNum.getUserName() + " | Number of Post Likes by this User: " + likeNum.getPostLikes() + " | Number of Comment Likes by this User: " + likeNum.getCommentLikes());
 	}
 	
 	// Loops through list of options that output to the user's screen
