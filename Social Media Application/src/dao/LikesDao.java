@@ -49,6 +49,10 @@ public class LikesDao {
 	private final String DELEATE_POST_LIKE_QUERY = "DELETE FROM POST_LIKES WHERE ID = ?";
 	private final String DELETE_COMMENT_LIKE_QUERY = "DELETE FROM COMMENT_LIKES WHERE ID = ?";
 	
+	// Update the date the post or comment was liked by id
+	private final String UPDATE_COMMENT_LIKE_QUERY = "UPDATE COMMENT_LIKES SET DATE_LIKED = STR_TO_DATE (?, '%Y-%m-%d %H:%i') WHERE ID = ?";
+	private final String UPDATE_POST_LIKE_QUERY = "UPDATE POST_LIKES SET DATE_LIKED = STR_TO_DATE (?, '%Y-%m-%d %H:%i') WHERE ID = ?";
+	
 	// Method queries database by comments, posts, and users
 	public Likes getNumberOfPostsCommentLikesByUser(int userId) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(GET_POST_COMMENTS_TOTAL_BY_USER_QUERY);
@@ -137,6 +141,28 @@ public class LikesDao {
 		// Set parameter and execute query
 		ps.setInt(1, likeId);
 		ps.executeUpdate();
+	}
+	
+	// Method updates post or comment liked date
+	public void updateLikeDate(int id, String date, String type) throws SQLException
+	{
+		PreparedStatement ps = null;
+		
+		// If comment update comment liked date
+		if (type.equals("comment")) {
+			ps = connection.prepareStatement(UPDATE_COMMENT_LIKE_QUERY);
+			ps.setString(1, date);
+			ps.setInt(2, id);
+			ps.executeUpdate();
+		}
+		// If post update post liked date
+		else {
+			// Statement to prevent program erroring out when parent post does not exist
+			ps = connection.prepareStatement(UPDATE_POST_LIKE_QUERY);
+			ps.setString(1, date);
+			ps.setInt(2, id);
+			ps.executeUpdate();
+		}
 	}
 													
 }

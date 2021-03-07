@@ -24,7 +24,8 @@ public class Menu {
 			"Delete Comment by ID",
 			"Show number of Post and Comment Likes by User ID",
 			"Like a Post or like a Comment",
-			"Unlike a Post or like a Comment"
+			"Unlike a Post or like a Comment",
+			"Update Date Like on a Comment or Post"
 	);
 	
 	// Create a data access object to allow getting data from the db via a layer
@@ -47,10 +48,13 @@ public class Menu {
 			int userId;
 			int postId;
 			int postCommentId;
+			
+			// More like, post, and comment variabel
 			int commentId;
 			int likeId;
 			String commentText;
 			String commOrPost;
+			String dateLiked;
 			
 			// Determine which operation
 			try {
@@ -121,8 +125,24 @@ public class Menu {
 								System.out.println("\nGive the Like ID of the "  + commOrPost.toLowerCase() + ": ");
 								likeId = Integer.parseInt(scanner.nextLine());
 								System.out.println();
-								unlikePostOrComment(likeId, commOrPost.toLowerCase());
-					
+								unlikePostOrComment(likeId, commOrPost.toLowerCase());			
+							}
+							// Tell user invalid choice
+							else
+								System.out.println("\nInvalid option given. Please try again");
+							break;
+						case "8":
+							// Ask user if they want to like a post or comment
+							System.out.println("\nChange the Date Liked of a post or comment?: ");
+							commOrPost = scanner.nextLine();
+							
+							// Checks whether option given was correct or not,
+							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
+								System.out.println("\nGive the Like ID of the "  + commOrPost.toLowerCase() + "and enter the date in this format (YYYY-MM-DD HH:mm): ");
+								likeId = Integer.parseInt(scanner.nextLine());
+								dateLiked = scanner.nextLine();
+								System.out.println();
+								updateDateLiked(likeId, dateLiked, commOrPost.toLowerCase());
 							}
 							// Tell user invalid choice
 							else
@@ -181,14 +201,21 @@ public class Menu {
 			System.out.println("Username: " + likeNum.getUserName() + " | Number of Post Likes by this User: " + likeNum.getPostLikes() + " | Number of Comment Likes by this User: " + likeNum.getCommentLikes());
 	}
 	
+	// Like a post or comment
 	private void likePostOrComment(int userId, int id, String type) throws SQLException
 	{
 		likesDao.like(userId, id, type);
 	}
 	
+	// Remove a like from a comment or post
 	private void unlikePostOrComment(int id, String type) throws SQLException
 	{
 		likesDao.unlike(id, type);
+	}
+	
+	// Update a comment or post liked date by id
+	private void updateDateLiked(int id, String date, String type) throws SQLException {
+		likesDao.updateLikeDate(id, date, type);
 	}
 	
 	// Loops through list of options that output to the user's screen
