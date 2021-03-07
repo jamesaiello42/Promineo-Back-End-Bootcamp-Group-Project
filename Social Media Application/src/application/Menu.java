@@ -23,7 +23,8 @@ public class Menu {
 			"Update Comment Text by ID",
 			"Delete Comment by ID",
 			"Show number of Post and Comment Likes by User ID",
-			"Like a Post or like a Comment"
+			"Like a Post or like a Comment",
+			"Unlike a Post or like a Comment"
 	);
 	
 	// Create a data access object to allow getting data from the db via a layer
@@ -45,7 +46,9 @@ public class Menu {
 			// These are variables are initialized the by scanner objects and passed to dao objects
 			int userId;
 			int postId;
+			int postCommentId;
 			int commentId;
+			int likeId;
 			String commentText;
 			String commOrPost;
 			
@@ -89,25 +92,42 @@ public class Menu {
 							displayNumberOfPostsCommentLikesByUser(userId);
 							break;
 						case "6":
+							// Ask user if they want to like a post or comment
 							System.out.println("\nLike a post or comment?: ");
 							commOrPost = scanner.nextLine();
 							
-							switch (commOrPost.toLowerCase())
-							{
-								case "post": 
-									System.out.println("\nGive the ID of the Post and ID of the User: ");
-									postId = Integer.parseInt(scanner.nextLine());
-									userId = Integer.parseInt(scanner.nextLine());
-									break;
-								case "comment":
-									System.out.println("\nGive the ID of the Comment and ID of the User: ");
-									commentId = Integer.parseInt(scanner.nextLine());
-									userId = Integer.parseInt(scanner.nextLine());
-									break;
+							// Checks whether option given was correct or not,
+							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
+								System.out.println("\nGive the ID of the "  + commOrPost.toLowerCase() + " and ID of the User: ");
+								postCommentId = Integer.parseInt(scanner.nextLine());
+								
+								// Likes a post or comment
+								userId = Integer.parseInt(scanner.nextLine());
+								System.out.println();
+								likePostOrComment(userId, postCommentId, commOrPost.toLowerCase());			
+								
 							}
-							
+							// Tell user invalid choice
+							else
+								System.out.println("Invalid option given. Please try again");
 							break;
-
+						case "7":
+							// Ask user if they want to like a post or comment
+							System.out.println("\nUnlike a post or comment?: ");
+							commOrPost = scanner.nextLine();
+							
+							// Checks whether option given was correct or not,
+							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
+								System.out.println("\nGive the Like ID of the "  + commOrPost.toLowerCase() + ": ");
+								likeId = Integer.parseInt(scanner.nextLine());
+								System.out.println();
+								unlikePostOrComment(likeId, commOrPost.toLowerCase());
+					
+							}
+							// Tell user invalid choice
+							else
+								System.out.println("\nInvalid option given. Please try again");
+							break;
 				}
 			}
 			// Show user any SQL errors
@@ -159,6 +179,16 @@ public class Menu {
 		else
 			// Show comment, post info, and usernames attached to both.
 			System.out.println("Username: " + likeNum.getUserName() + " | Number of Post Likes by this User: " + likeNum.getPostLikes() + " | Number of Comment Likes by this User: " + likeNum.getCommentLikes());
+	}
+	
+	private void likePostOrComment(int userId, int id, String type) throws SQLException
+	{
+		likesDao.like(userId, id, type);
+	}
+	
+	private void unlikePostOrComment(int id, String type) throws SQLException
+	{
+		likesDao.unlike(id, type);
 	}
 	
 	// Loops through list of options that output to the user's screen
