@@ -102,7 +102,7 @@ public class Menu {
 							
 							// Checks whether option given was correct or not,
 							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
-								System.out.println("\nGive the ID of the "  + commOrPost.toLowerCase() + " and ID of the User: ");
+								System.out.println("\nGive the User ID and ID of the " + commOrPost.toLowerCase() + ": ");
 								postCommentId = Integer.parseInt(scanner.nextLine());
 								
 								// Likes a post or comment

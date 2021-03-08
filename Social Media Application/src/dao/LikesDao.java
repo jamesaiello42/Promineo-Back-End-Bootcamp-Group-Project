@@ -95,7 +95,7 @@ public class LikesDao {
 		
 		// Statement to prevent program erroring out when parent user does not exist
 		PreparedStatement ps2 = connection.prepareStatement(QUERY_CHECK_USER);
-		ps2.setInt(1, id);
+		ps2.setInt(1, userId);
 		rs2 = ps2.executeQuery();
 		
 		// Loop through all post rows to check
