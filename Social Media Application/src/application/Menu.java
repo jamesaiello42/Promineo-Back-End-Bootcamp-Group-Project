@@ -25,7 +25,7 @@ public class Menu {
 			"Show number of Post and Comment Likes by User ID",
 			"Like a Post or like a Comment",
 			"Unlike a Post or like a Comment",
-			"Update Date Like on a Comment or Post"
+			"Update Date Liked on a Comment or Post"
 	);
 	
 	// Create a data access object to allow getting data from the db via a layer
@@ -138,7 +138,7 @@ public class Menu {
 							
 							// Checks whether option given was correct or not,
 							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
-								System.out.println("\nGive the Liked ID of the "  + commOrPost.toLowerCase() + " and enter the date in this format (YYYY-MM-DD HH:mm): ");
+								System.out.println("\nGive the Like ID of the "  + commOrPost.toLowerCase() + " and enter the date in this format (YYYY-MM-DD HH:mm): ");
 								likeId = Integer.parseInt(scanner.nextLine());
 								dateLiked = scanner.nextLine();
 								System.out.println();
