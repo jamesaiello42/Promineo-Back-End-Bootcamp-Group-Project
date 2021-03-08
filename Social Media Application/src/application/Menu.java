@@ -102,7 +102,7 @@ public class Menu {
 							
 							// Checks whether option given was correct or not,
 							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
-								System.out.println("\nGive the User ID and ID of the " + commOrPost.toLowerCase() + ": ");
+								System.out.println("\nGive the ID of the " + commOrPost.toLowerCase() + " and ID of the User: ");
 								postCommentId = Integer.parseInt(scanner.nextLine());
 								
 								// Likes a post or comment
@@ -138,7 +138,7 @@ public class Menu {
 							
 							// Checks whether option given was correct or not,
 							if (commOrPost.toLowerCase().equals("post") || commOrPost.toLowerCase().equals("comment")) {
-								System.out.println("\nGive the Like ID of the "  + commOrPost.toLowerCase() + " and enter the date in this format (YYYY-MM-DD HH:mm): ");
+								System.out.println("\nGive the Liked ID of the "  + commOrPost.toLowerCase() + " and enter the date in this format (YYYY-MM-DD HH:mm): ");
 								likeId = Integer.parseInt(scanner.nextLine());
 								dateLiked = scanner.nextLine();
 								System.out.println();
