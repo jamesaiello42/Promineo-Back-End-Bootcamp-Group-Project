@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Whole file was implemented by James Aiello, unless stated otherwise. 
+
 public class CommentsDao {
 	private Connection connection;
 	

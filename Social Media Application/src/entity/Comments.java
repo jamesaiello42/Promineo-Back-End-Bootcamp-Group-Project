@@ -1,5 +1,7 @@
 package entity;
 
+//Whole file was implemented by James Aiello, unless stated otherwise. 
+
 public class Comments {
 	// Comments Fields
 	private int id;

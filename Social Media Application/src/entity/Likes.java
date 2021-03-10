@@ -1,60 +1,115 @@
 package entity;
 
-// This entity class for both tables comment_likes and post_likes
+//Whole file was implemented by James Aiello, unless stated otherwise. 
+
 public class Likes {
 	private int id;
 	private int userId;
+	private String username; 
+	private int post_id; 
+	private int comment_id; 
 	private int postOrCommentId;
-	private String dateLiked;
-	
-	// Stores user GET_POST_COMMENTS_TOTAL_BY_USER_QUERY info
-	private String userName;
+	private String postOrComment;
+	private String dateLike;
 	private int postLikes;
 	private int commentLikes;
 	
-	// Used to by the GET_POST_COMMENTS_TOTAL_BY_USER_QUERY
-	public Likes(String userName, int postLikes, int commentLikes) {
-		super();
-		this.userName = userName;
-		this.postLikes = postLikes;
-		this.commentLikes = commentLikes;
-	}
+	public Likes() {}; //end default constructor 
 	
-	// Get id of post like or comment like
+	public Likes(int id, int userId, int postOrCommentId, String postOrComment, String dateLike) {
+		this.setId(id); 
+		this.setUserId(userId); 
+		this.setUserId(userId);
+		this.setPostOrCommentId(postOrCommentId);
+		this.setPostOrComment(postOrComment);
+		this.setDateLike(dateLike);
+	}//end constructor 
+
+	public Likes(String username, int post_id, int comment_id) {
+		this.setUsername(username); 
+		this.setPostId(post_id); 
+		this.setCommentId(comment_id);
+	}//end constructor 
+
 	public int getId() {
 		return id;
-	}
+	}//end getId
 
-	// Get id of user
+	public void setId(int id) {
+		this.id = id;
+	}//end setId
+
 	public int getUserId() {
 		return userId;
-	}
+	}//end getUserId
 
-	// Get post or comment id
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}//end setUserId
+
 	public int getPostOrCommentId() {
 		return postOrCommentId;
-	}
+	}//end getPostOrCommentId
 
-	// Gets date post or comment was like
-	public String getDateLiked() {
-		return dateLiked;
-	}
+	public void setPostOrCommentId(int postOrCommentId) {
+		this.postOrCommentId = postOrCommentId;
+	}//end setPostOrCommentId
 
-	// Get username of like
-	public String getUserName() {
-		return userName;
-	}
+	public String getPostOrComment() {
+		return postOrComment;
+	}//end getPostOrComment
 
-	// Get post like count
+	public void setPostOrComment(String postOrComment) {
+		this.postOrComment = postOrComment;
+	}//end setPostOrComment
+
+	public String getDateLike() {
+		return dateLike;
+	}//end getDateLike
+
+	public void setDateLike(String dateLike) {
+		this.dateLike = dateLike;
+	}//end setDateLike
+
+	public String getUsername() {
+		return username;
+	}//end getUsername
+
+	public void setUsername(String username) {
+		this.username = username;
+	}//end setUsername
+
+	public int getPostId() {
+		return post_id;
+	}//end getPostId
+
+	public void setPostId(int post_id) {
+		this.post_id = post_id;
+	}//end setPostId
+
+	public int getCommentId() {
+		return comment_id;
+	}//end getCommentId
+
+	public void setCommentId(int commentId) {
+		this.comment_id = commentId;
+	}//end setCommentId
+
 	public int getPostLikes() {
+		
 		return postLikes;
-	}
+	}//end getPostLikes
 
-	// Get comment like count
+	public void setPostLikes(int postLikes) {
+		this.postLikes = postLikes;
+	}//end setPostLikes
+
 	public int getCommentLikes() {
 		return commentLikes;
-	}
-	
-	
-	
-}
+	}//end getCommentLikes
+
+	public void setCommentLikes(int commentLikes) {
+		this.commentLikes = commentLikes;
+	}//setCommentLikes
+
+}//end Likes

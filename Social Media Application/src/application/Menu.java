@@ -6,11 +6,17 @@ import java.util.List;
 import java.util.Scanner;
 import dao.CommentsDao;
 import dao.LikesDao;
+import dao.PostsDao;
 import entity.Comments;
 import entity.Likes;
+import entity.Posts;
+
+
+// Attention: On the case statements, where it says Created By, this means the creator did all of java methods and classes involved that menu option.
 
 public class Menu {
 	// Objects are responsible for directly touching the db. 
+	private PostsDao postsDao; 
 	private CommentsDao commentsDao;
 	private LikesDao likesDao;
 	private Scanner scanner = new Scanner(System.in);
@@ -19,9 +25,13 @@ public class Menu {
 	// Add new options here
 	private List<String> options = Arrays.asList(
 			"Display All Posts and Comments by User ID",
+			"Create a new post", //new add 
 			"Create a new comment",
+			"Update Post Text by ID", //new add
 			"Update Comment Text by ID",
+			"Delete Post by ID", //new add 
 			"Delete Comment by ID",
+			"Show Post and Comment Likes by User ID", //new add 
 			"Show number of Post and Comment Likes by User ID",
 			"Like a Post or like a Comment",
 			"Unlike a Post or like a Comment",
@@ -30,6 +40,7 @@ public class Menu {
 	
 	// Create a data access object to allow getting data from the db via a layer
 	public Menu() {
+		postsDao = new PostsDao(); 
 		commentsDao = new CommentsDao();
 		likesDao = new LikesDao();
 	}
@@ -46,12 +57,13 @@ public class Menu {
 			
 			// These are variables are initialized the by scanner objects and passed to dao objects
 			int userId;
-			int postId;
+			int postId = 0;
 			int postCommentId;
 			
-			// More like, post, and comment variabel
+			// More like, post, and comment variables
 			int commentId;
 			int likeId;
+			String postText = ""; 
 			String commentText;
 			String commOrPost;
 			String dateLiked;
@@ -60,42 +72,89 @@ public class Menu {
 			try {
 					switch (selection) {
 						// Display all comments and post by the passed in user from the db
+						// Created by James Aiello
 						case "1":		
 							System.out.println("\nEnter in the ID of the User: ");
 							userId = Integer.parseInt(scanner.nextLine());
 							System.out.println();
-							displayCommentsPostsByUser(userId);
+							displayCommentsPostsByUser(userId);//need to write this method 
 							System.out.println("\n");
 							break;
+							
+						// Menu option creates a new post
+						// Created by Wendy Sun
+						case "2": 
+							System.out.println("\nPoster ID, and Post Text: ");
+							userId = Integer.parseInt(scanner.nextLine());
+							postText = scanner.nextLine();
+							createNewPost(userId, postText);// need to write method at the bottom 
+							break;
+						
 						// Menu option creates a new comment on a post
-						case "2":
+						// Created by James Aiello
+						case "3":
 							System.out.println("\nEnter the Post ID, Commenter ID, and Comment Text: ");
 							postId = Integer.parseInt(scanner.nextLine());
 							userId = Integer.parseInt(scanner.nextLine());
 							commentText = scanner.nextLine();
 							createNewComment(postId, userId, commentText);
 							break;
+						
+						
+						// Menu option updates a post's text based off what ID and string the user passes in
+						// Created by James Aiello
+						case "4":
+							System.out.println("\nEnter the Post ID, and Post Text: ");
+							postId = Integer.parseInt(scanner.nextLine());
+							postText = scanner.nextLine();
+							updatePostByID(postId, postText);
+							break;
+							
 						// Menu option updates a comment's text based off what ID and string the user passes in
-						case "3":
+						// Created by James Aiello
+						case "5":
 							System.out.println("\nEnter the Comment ID, and Comment Text: ");
 							commentId = Integer.parseInt(scanner.nextLine());
 							commentText = scanner.nextLine();
 							updateCommentByID(commentId, commentText);
 							break;
-						// Menu option deletes a comment by
-						case "4":
+						
+						// Menu option deletes a post by ID 
+						// Created by Wendy Sun
+						case "6":
+							System.out.println("\nEnter the Post ID to delete a post:  ");
+							postId = Integer.parseInt(scanner.nextLine());
+							deletePostByID(postId);
+							break;
+							
+						// Menu option deletes a comment by ID
+						// Created by James Aiello
+						case "7":
 							System.out.println("\nEnter the Comment ID to delete a comment (will also delete from Likes table due to dependency): ");
 							commentId = Integer.parseInt(scanner.nextLine());
 							deleteCommentByID(commentId);
 							break;
+						
+						// Show Post and Comment Likes by User ID
+						// Created by Wendy Sun
+						case "8":	
+							System.out.println("\nEnter the ID of the User: ");
+							userId = Integer.parseInt(scanner.nextLine());
+							System.out.println();
+							displayCommentsPostsByUser(userId);
+							break;
+						
 						// Show number of likes for one user's posts or comments
-						case "5":
+						// Created by James Aiello
+						case "9":
 							System.out.println("\nEnter the ID of the User: ");
 							userId = Integer.parseInt(scanner.nextLine());
 							System.out.println();
 							displayNumberOfPostsCommentLikesByUser(userId);
 							break;
-						case "6":
+						
+						// Created by James Aiello
+						case "10":
 							// Ask user if they want to like a post or comment
 							System.out.println("\nLike a post or comment?: ");
 							commOrPost = scanner.nextLine();
@@ -115,7 +174,8 @@ public class Menu {
 							else
 								System.out.println("Invalid option given. Please try again");
 							break;
-						case "7":
+						// Created by James Aiello
+						case "11":
 							// Ask user if they want to like a post or comment
 							System.out.println("\nUnlike a post or comment?: ");
 							commOrPost = scanner.nextLine();
@@ -131,7 +191,8 @@ public class Menu {
 							else
 								System.out.println("\nInvalid option given. Please try again");
 							break;
-						case "8":
+						// Created by James Aiello
+						case "12":
 							// Ask user if they want to like a post or comment
 							System.out.println("\nChange the Date Liked of a post or comment?: ");
 							commOrPost = scanner.nextLine();
@@ -161,6 +222,30 @@ public class Menu {
 		} while (!selection.equals("-1"));
 	}
 	
+	// Loops through list of options that output to the user's screen
+	private void printMenu() {
+		System.out.println("Select an Option (-1 to terminate program):\n---------------------------------------------");
+		for (int i = 0; i < options.size(); i++)
+				System.out.println((i + 1) + ") " + options.get(i));
+			
+			System.out.println("\nSelection: ");
+	}//printMenu 
+		
+	//Outputs a list of post and comments by a user id and shows are usernames attached to comments and posts
+	private void displayPostsByUser(int posterId) throws SQLException {
+		List<Posts> posts = postsDao.getsPostsByPoster(posterId);
+		
+		// Show comment, post info, and usernames attached to both.
+		for (Posts post : posts) {
+			System.out.println("Post: " + ((Posts) posts).getPostText() + " Poster: " + ((Posts) posts).getPosterUsername());
+		}
+		
+		// If there are zero rows, tell the user nothing is found
+		if (posts.size() == 0)
+			System.out.println("Results of Posts by User ID query \"" + posterId + "\" not found.");
+	}
+
+	
 	// Outputs a list of post and comments by a user id and shows are usernames attached to comments and posts
 	private void displayCommentsPostsByUser(int userId) throws SQLException {
 		List<Comments> comments = commentsDao.getCommentsPostsByUser(userId);
@@ -175,15 +260,30 @@ public class Menu {
 			System.out.println("Results of Posts and Comments by User ID query \"" + userId + "\" not found.");
 	}
 	
+	
+	private void createNewPost(int posterId, String postText) throws SQLException
+	{
+		postsDao.createNewPost(posterId, postText);
+	}//end createNewPost
+	
 	private void createNewComment(int postId, int commenterId, String commentText) throws SQLException
 	{
 		commentsDao.createNewComment(postId, commenterId, commentText);
-	}
+	}//end createNewComment
+	
+	// Updates a single post text by id 
+		private void updatePostByID(int postId, String postText) throws SQLException {
+			postsDao.updatePost(postId, postText);	
+		}//end updatePostByID
 	
 	// Updates a single comment text by id 
 	private void updateCommentByID(int commentId, String commentText) throws SQLException {
 		commentsDao.updateComment(commentId, commentText);	
 	}
+	
+	private void deletePostByID(int postId) throws SQLException {
+		postsDao.deletePostById(postId);
+	}//end deletePostsByID
 	
 	private void deleteCommentByID(int commentId) throws SQLException {
 		commentsDao.deleteCommentById(commentId);
@@ -194,12 +294,13 @@ public class Menu {
 		Likes likeNum = likesDao.getNumberOfPostsCommentLikesByUser(userId);
 		
 		// If there are zero rows, tell the user nothing is found
-		if (likeNum.getUserName() == null)
+		if (likeNum.getUsername() == null)
 			System.out.println("Results of Posts and Comments by User ID query \"" + userId + "\" not found.");
 		else
 			// Show comment, post info, and usernames attached to both.
-			System.out.println("Username: " + likeNum.getUserName() + " | Number of Post Likes by this User: " + likeNum.getPostLikes() + " | Number of Comment Likes by this User: " + likeNum.getCommentLikes());
+			System.out.println("Username: " + likeNum.getUsername() + " | Number of Post Likes by this User: " + likeNum.getPostLikes() + " | Number of Comment Likes by this User: " + likeNum.getCommentLikes());
 	}
+	
 	
 	// Like a post or comment
 	private void likePostOrComment(int userId, int id, String type) throws SQLException
@@ -216,14 +317,5 @@ public class Menu {
 	// Update a comment or post liked date by id
 	private void updateDateLiked(int id, String date, String type) throws SQLException {
 		likesDao.updateLikeDate(id, date, type);
-	}
-	
-	// Loops through list of options that output to the user's screen
-	private void printMenu() {
-		System.out.println("Select an Option (-1 to terminate program):\n---------------------------------------------");
-		for (int i = 0; i < options.size(); i++)
-			System.out.println((i + 1) + ") " + options.get(i));
-		
-		System.out.println("\nSelection: ");
 	}
 }
