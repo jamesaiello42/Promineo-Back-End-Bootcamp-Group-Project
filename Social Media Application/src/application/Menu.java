@@ -12,7 +12,7 @@ import entity.Likes;
 import entity.Posts;
 
 
-// Attention: On the case statements, where it says Created By, this means the creator did all of java methods and classes involved that menu option.
+// Attention: On the case statements, where it says Created By, this means the creator did all of java methods involved that menu option.
 
 public class Menu {
 	// Objects are responsible for directly touching the db. 
