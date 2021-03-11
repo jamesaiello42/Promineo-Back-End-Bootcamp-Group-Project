@@ -1,6 +1,7 @@
 package entity;
 
 //Whole file was implemented by James Aiello, unless stated otherwise. 
+// Wendy Sun contributed Setters and Getters
 
 public class Likes {
 	private int id;
@@ -14,8 +15,10 @@ public class Likes {
 	private int postLikes;
 	private int commentLikes;
 	
+	// Wendy Sun contributed this one
 	public Likes() {}; //end default constructor 
 	
+	// Wendy Sun contributed the constructor
 	public Likes(int id, int userId, int postOrCommentId, String postOrComment, String dateLike) {
 		this.setId(id); 
 		this.setUserId(userId); 
@@ -25,11 +28,20 @@ public class Likes {
 		this.setDateLike(dateLike);
 	}//end constructor 
 
+	// Wendy Sun contributed this one
 	public Likes(String username, int post_id, int comment_id) {
 		this.setUsername(username); 
 		this.setPostId(post_id); 
 		this.setCommentId(comment_id);
 	}//end constructor 
+	
+	// James Aiello contributed this one
+	// Used to by the GET_POST_COMMENTS_TOTAL_BY_USER_QUERY
+	public Likes(String username, int postLikes, int commentLikes, int sum) {
+		this.username = username;
+		this.postLikes = postLikes;
+		this.commentLikes = commentLikes;
+	}
 
 	public int getId() {
 		return id;

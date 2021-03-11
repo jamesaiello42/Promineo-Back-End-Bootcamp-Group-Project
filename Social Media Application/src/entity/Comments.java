@@ -1,6 +1,7 @@
 package entity;
 
-//Whole file was implemented by James Aiello, unless stated otherwise. 
+// Wendy Sun contributed setters and getters
+// Fields were implemented by James Aiello.
 
 public class Comments {
 	// Comments Fields
@@ -23,7 +24,59 @@ public class Comments {
 		this.postText = postText;
 		this.posterUsername = posterUsername;
 	}
+	
+	// James Aiello and Wendy Sun contributed this one
+	public Comments(int id, String commenterUsername, String commentText, String postText, String posterUsername) {
+		this.setId(id); 
+		this.setCommenterId(commenterId); 
+		this.setCommenterUsername(commenterUsername); 
+		this.setCommentText(commentText); 
+		this.setPostText(postText); 
+		this.setPosterUsername(posterUsername); 
+	}//end constructor 
+	
+	// Wendy Sun contributed constructor
+	public Comments(int postId, String postText, int CommenterId, String commentText, String dateCommented ) {
 
+		this.setPostId(postId); 
+		this.setPostText(postText); 
+		this.setCommenterId(commenterId);
+		this.setCommentText(commentText);
+		this.setDateCommented(dateCommented); 
+	}//end constructor
+
+	private void setId(int id) {
+		this.id = id;			
+	}//end setId
+	
+	private void setPostId(int postId) {
+		this.postId= postId; 	
+	}//end setPostId
+		
+	private void setCommenterId(int commenterId) {
+		this.commenterId = commenterId;
+	}//end setCommenterId
+
+	private void setCommenterUsername(String commenterUsername) {
+		this.commenterUsername = commenterUsername; 	
+	}//end setCommenterUsername 
+
+	private void setCommentText(String commentText) {
+		this.commentText = commentText; 		
+	}//end setCommentText
+
+	private void setDateCommented(String dateCommented) {
+		this.dateCommented = dateCommented;	
+	}//end setDateCommented
+	
+	private void setPosterUsername(String posterUsername) {
+		this.posterUsername = posterUsername; 		
+	}// end setPosterUsername 
+
+	private void setPostText(String postText) {
+		this.postText = postText; 		
+	}//end setPostText
+	
 	// Getter for Field id
 	public int getId() {
 		return id;

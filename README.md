@@ -5,7 +5,7 @@ Contributors:
 
 ## Some Background Information
 * Program displays menu options for the entities Users, Posts, Comments, and Likes.
-* This options allow for the following:
+* These options allow for the following:
 	* Create
 	* Read
 	* Update
@@ -19,7 +19,7 @@ Type into you git client this command: git clone https://github.com/jamesaiello4
 
 ### Creating the Database
 * Once the files are on your computer, you will need to have MySQL installed on your computer.
-* You will need to run the Create_BD.sql in you MySQL Workbench to get the database set up. 
+* You will need to run the Create_DB.sql in you MySQL Workbench to get the database set up. 
 	* File is located in the DB Create Script and ERD sub-directory.
 
 ### Setting up the Eclipse Project

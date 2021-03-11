@@ -1,7 +1,5 @@
 package dao;
 
-// Whole file was implemented by James Aiello, unless stated otherwise. 
-
 import entity.Likes;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +10,7 @@ import java.util.List;
 
 
 	public class LikesDao {
+		// Beginning of James Aiello Contribution
 		private Connection connection;
 		Likes postLike = new Likes(); 
 		Likes commentLike = new Likes(); 
@@ -64,6 +63,9 @@ import java.util.List;
 		private final String UPDATE_COMMENT_LIKE_QUERY = "UPDATE COMMENT_LIKES SET DATE_LIKED = STR_TO_DATE (?, '%Y-%m-%d %H:%i') WHERE ID = ?";
 		private final String UPDATE_POST_LIKE_QUERY = "UPDATE POST_LIKES SET DATE_LIKED = STR_TO_DATE (?, '%Y-%m-%d %H:%i') WHERE ID = ?";
 		
+		// End of James Aiello Contribution
+		
+		// Beginning of Wendy Sun Contribution
 		//Query pulls all likes for one post by postId
 		private final String GET_LIKES_BY_POSTID_QUERY = "SELECT * FROM POST_LIKES WHERE POST_ID =?"; 
 		
@@ -75,16 +77,15 @@ import java.util.List;
 		
 		//Query pull a comment_like by comment_like_id
 		private final String GET_COMMENT_LIKE_BY_COMMENTLIKESID_QUERY = "SELECT * FROM COMMENT_LIKES WHERE ID =?"; 
-				
+		
+		// End of Wendy Sun Contribution
+		
+		// Beginning of James Aiello Contribute
 		// Create a new post_like
 		private final String CREATE_POST_LIKES_QUERY = "INSERT INTO POST_LIKES (ID, POST_ID, USER_ID, DATE_LIKED) VALUES (?, ?, ?, NOW())";
-		//Update a post_like
-		//private final String UPDATE_POST_LIKES_QUERY_BY_ID = "UPDATE POSTS SET POST_TEXT = ?, DATE_EDITED = NOW() WHERE ID = ?";
 		
-		//Create a new comment_like 
+		//Create a new comment_like
 		private final String CREATE_COMMENT_LIKES_QUERY = "INSERT INTO COMMENT_LIKES (ID, COMMENT_ID, USER_ID, DATE_LIKED) VALUES (?, ?, ?, NOW())";
-		//Update a post_like
-		//private final String UPDATE_POSTS_LIKES_QUERY_BY_ID = "UPDATE POST_LIKE SET POST_TEXT = ?, DATE_EDITED = NOW() WHERE ID = ?";
 		
 		//Delete a like  from a post
 		private final String DELETE_POST_LIKE_QUERY_BY_ID = "DELETE FROM POST_LIKES WHERE ID = ?";
@@ -113,7 +114,7 @@ import java.util.List;
 			
 			// Loop through all rows and store in Comments list 
 			while (rs.next()) {
-				userLikeCnt = new Likes(rs.getString(3), rs.getInt(1), rs.getInt(2));
+				userLikeCnt = new Likes(rs.getString(3), rs.getInt(1), rs.getInt(2), 0);
 			}
 			
 			// Return comments, posts, usernames list
@@ -153,21 +154,6 @@ import java.util.List;
 			// Return comments, posts, usernames list
 			return postAndCommentsLikesByUser;
 		}//end getPostAndCommentsLikesByUser
-		
-				
-		public Likes getPostLikesByPostId (int post_id) throws SQLException {
-			PreparedStatement ps = connection.prepareStatement(GET_LIKES_BY_POSTID_QUERY); 
-			ps.setInt(1, post_id);
-			ps.executeQuery();
-			return postLike; 	
-		}//end getPostLikesByPostId
-		
-		public Likes getCommentLikesByCommentId (int comment_id) throws SQLException {
-			PreparedStatement ps = connection.prepareStatement( GET_LIKES_BY_COMMENTID_QUERY); 
-			ps.setInt(1, comment_id);
-			ps.executeQuery();
-			return commentLike; 	
-		}//end getCommentLikesByCommentLikeId
 		
 		
 		// Methods creates a new like for the post
@@ -300,6 +286,24 @@ import java.util.List;
 				ps.executeUpdate();
 			}
 		}
+		
+		// End of James Aiello Contribute
+		
+		// By Wendy Sun		
+		public Likes getPostLikesByPostId (int post_id) throws SQLException {
+			PreparedStatement ps = connection.prepareStatement(GET_LIKES_BY_POSTID_QUERY); 
+			ps.setInt(1, post_id);
+			ps.executeQuery();
+			return postLike; 	
+		}//end getPostLikesByPostId
+		
+		// By Wendy Sun
+		public Likes getCommentLikesByCommentId (int comment_id) throws SQLException {
+			PreparedStatement ps = connection.prepareStatement( GET_LIKES_BY_COMMENTID_QUERY); 
+			ps.setInt(1, comment_id);
+			ps.executeQuery();
+			return commentLike; 	
+		}//end getCommentLikesByCommentLikeId
 		
 	}//end PostsDao
 
