@@ -26,3 +26,11 @@ Type into you git client this command: git clone https://github.com/jamesaiello4
 * You will need to import the project's workspace into Eclipse.
 * You will need to import the external MySQL Java Connector into your Eclipse project.
 * Open the Application.java and run the program.
+
+### Updates for Contribution by Wendy Sun
+* Below are Wendy's contributions to those files:
+* 1)     Likes.java:  added setters and update field section and comments in the file.
+* 2)     Comments.java: uploaded the Comments.java and have updated version of the file including adding default constructor, setters, and comments etc. 
+* 3)     LikesDao.java: Wendy's contribution includes the following: GET_POSTS_COMMENTS_BY_USER_ID_QUERY, getPostLikesByPostLikeId method, getPostLikesByCommentLikeId method, createNewPostLike method, etc.
+* 4)     Menu.java: I added more options out of 12 options in the file. These added options are: case “2”, case “4”, case”6”, case”8”. The contributor of case”4” is not labeled correctly. I also added some methods in the file, such as displayPostsByUser, updatePostByID, etc.
+* 5)     In order to merge Wendy's version and Jame's version together, Wendy also make changes in files in entity and dao packages.
